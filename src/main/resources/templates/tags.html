@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/main.css}" rel="stylesheet">
+</head>
+<body>
+<h1 th:text="${attraction.name.toUpperCase()}"> </h1>
+<table>
+    <tr th:each="tag : ${attraction.tags}">
+        <td th:text="${tag}"></td>
+    </tr>
+</table>
+</body>
+</html>
