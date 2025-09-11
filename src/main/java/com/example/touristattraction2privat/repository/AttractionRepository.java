@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +16,6 @@ import java.util.Scanner;
 
 @Repository
 public class AttractionRepository {
-    List<TouristAttraction> attractionList = getAllAttractions();
 
     public List<TouristAttraction> getAllAttractions() {
         File file = new File("src/main/resources/data/attractions.csv");
@@ -50,7 +52,7 @@ public class AttractionRepository {
     }
 
     public TouristAttraction getAttractionFromName(String name) {
-        for (TouristAttraction attraction: attractionList){
+        for (TouristAttraction attraction: getAllAttractions()){
             if (name.equalsIgnoreCase(attraction.getName())){
                 return attraction;
             }
@@ -58,10 +60,32 @@ public class AttractionRepository {
         return null;
     }
 
-    public TouristAttraction saveAttraction() {
+    public TouristAttraction saveAttraction(TouristAttraction attraction) {
         try {
+            File file = new File("src/main/resources/data/attractions.csv");
+            FileWriter outFile = new FileWriter(file, true);
 
-        }catch ()
+            outFile.write(
+                    "\n" +attraction.getAttractionId() + ";" + attraction.getName() +
+                            ";" + attraction.getDescription() + ";"
 
+            );
+
+            ArrayList<Tag> attractionTags = attraction.getTags();
+            StringBuilder builder = new StringBuilder();
+
+            for (int i = 0; i < attractionTags.size(); i++) {
+                builder.append(attractionTags.get(i));
+                if (i < attractionTags.size() - 1) {
+                    builder.append(",");
+                }
+            }
+            outFile.write(builder.toString());
+            outFile.close();
+
+        } catch (IOException e) {
+            System.out.println("File not found");
+        }
+        return attraction;
     }
 }

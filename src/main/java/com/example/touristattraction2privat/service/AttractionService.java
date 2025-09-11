@@ -23,6 +23,6 @@ public class AttractionService {
     }
 
     public TouristAttraction saveAttraction(TouristAttraction touristAttraction) {
-        return attractionRepository.saveAttraction();
+        return attractionRepository.saveAttraction(touristAttraction);
     }
 }

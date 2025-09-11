@@ -3,7 +3,7 @@ package com.example.touristattraction2privat.model;
 import java.util.ArrayList;
 
 public class TouristAttraction {
-    private final int attractionId;
+    private int attractionId;
     private String name;
     private String description;
     private ArrayList<Tag> tags;

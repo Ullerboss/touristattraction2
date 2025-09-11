@@ -5,10 +5,7 @@ import com.example.touristattraction2privat.model.TouristAttraction;
 import com.example.touristattraction2privat.service.AttractionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,7 +40,7 @@ public class AttractionController {
         return "tags";
     }
 
-    @GetMapping("addAttraction")
+    @GetMapping("add")
     public String addAttractionForm(Model model){
         TouristAttraction attraction = new TouristAttraction();
         model.addAttribute("attraction",attraction);
@@ -51,8 +48,10 @@ public class AttractionController {
         return "addAttractionForm";
     }
 
+    @PostMapping("save")
     public String saveAttraction (@ModelAttribute TouristAttraction touristAttraction){
         attractionService.saveAttraction(touristAttraction);
+        return "redirect:/attractions";
     }
 
 

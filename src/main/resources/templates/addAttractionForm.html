@@ -1,17 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Registration Form</title>
     <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <body>
-<h1>Add an attraction</h1>
-<form action="#" >
+<h1>Add new attraction</h1>
+
+<form action="#" th:action="@{/attractions/save}" th:object="${attraction}" method="post">
+    <input type="hidden" th:field="*{attractionId}"/>
+    <label>Name</label>
+    <input type="text" th:field="*{name}">
+    <br>
+    <label>Description</label>
+    <input type="text" th:field="*{description}">
+    <br>
+    <label>Tags</label>
+    <select th:field="*{tags}" multiple>
+        <option th:each="tag: ${tags}" th:value="${tag}" th:text="${tag}"></option>
+    </select>
+    <br>
+    <button type="submit">Register attraction</button>
+
+
 
 
 
 </form>
-
 </body>
 </html>
