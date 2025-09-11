@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Form</title>
+    <link th:href="@{/main.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Attraction Update Form</h1>
+
+<form action="#" th:action="@{/user/update}" th:object="${attraction}" method="post">
+    <input type="hidden" th:field="*{attractionId}"/>
+    <label>Name</label>
+    <input type="text" th:field="*{name}">
+    <br>
+    <label>Description</label>
+    <input type="text" th:field="*{description}">
+    <br>
+    <label>Tags</label>
+    <select th:field="*{tags}">
+        <option th:each="tag: ${tags}" th:value="${tag}" th:text="${tag}"></option>
+    </select>
+    <br>
+    <button type="submit">Register</button>
+
+
+</form>
+
+</body>
+</html>

@@ -29,8 +29,6 @@ public class AttractionRepository {
                 txtLine = reader.nextLine();
                 String[] txtLineSplit = txtLine.split(";");
 
-                int idAsInt = Integer.parseInt(txtLineSplit[0]);
-
 
                 String[] tagsSplit = txtLineSplit[3].split(",");
                 ArrayList<Tag> tagArrayList = new ArrayList<>();
@@ -39,8 +37,10 @@ public class AttractionRepository {
                 }
 
 
-                TouristAttraction touristAttraction = new TouristAttraction(idAsInt,txtLineSplit[1],
-                        txtLineSplit[2],tagArrayList);
+                TouristAttraction touristAttraction = new TouristAttraction();
+                touristAttraction.setName(txtLineSplit[1]);
+                touristAttraction.setDescription(txtLineSplit[2]);
+                touristAttraction.setTags(tagArrayList);
 
                 attractionList.add(touristAttraction);
 
@@ -87,5 +87,56 @@ public class AttractionRepository {
             System.out.println("File not found");
         }
         return attraction;
+    }
+
+    public TouristAttraction getAttractionFromId(int attractionId) {
+        for (TouristAttraction attraction: getAllAttractions()){
+            if (attractionId == attraction.getAttractionId()){
+                return attraction;
+            }
+        }
+        return null;
+    }
+
+    public TouristAttraction updateAttraction(TouristAttraction updatedAttraction) {
+        List<TouristAttraction> touristAttractions = getAllAttractions();
+
+        for (TouristAttraction attraction : touristAttractions) {
+            if(attraction.getAttractionId() == updatedAttraction.getAttractionId()) {
+                attraction.setName(updatedAttraction.getName());
+                attraction.setDescription(updatedAttraction.getDescription());
+                attraction.setTags(updatedAttraction.getTags());
+            }
+        }
+
+        try {
+            File file = new File("src/main/resources/data/attractions.csv");
+            FileWriter outFile = new FileWriter(file);
+
+            for (TouristAttraction attraction : touristAttractions) {
+                outFile.write(
+                        attraction.getAttractionId() + ";" + attraction.getName() +
+                                ";" + attraction.getDescription() + ";" + "\n"
+
+                );
+
+                ArrayList<Tag> attractionTags = attraction.getTags();
+                StringBuilder builder = new StringBuilder();
+
+                for (int i = 0; i < attractionTags.size(); i++) {
+                    builder.append(attractionTags.get(i));
+                    if (i < attractionTags.size() - 1) {
+                        builder.append(",");
+                    }
+                }
+                outFile.write(builder.toString());
+            }
+            outFile.close();
+
+        } catch (IOException e) {
+            System.out.println("File not found");
+        }
+
+        return updatedAttraction;
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AttractionService {
+public class  AttractionService {
     private AttractionRepository attractionRepository;
 
     public AttractionService(AttractionRepository attractionRepository){
@@ -24,5 +24,13 @@ public class AttractionService {
 
     public TouristAttraction saveAttraction(TouristAttraction touristAttraction) {
         return attractionRepository.saveAttraction(touristAttraction);
+    }
+
+    public TouristAttraction getAttractionFromId(int attractionId) {
+        return attractionRepository.getAttractionFromId(attractionId);
+    }
+
+    public TouristAttraction updateAttraction(TouristAttraction touristAttraction) {
+        return attractionRepository.updateAttraction(touristAttraction);
     }
 }

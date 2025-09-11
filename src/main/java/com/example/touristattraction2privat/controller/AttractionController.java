@@ -54,5 +54,20 @@ public class AttractionController {
         return "redirect:/attractions";
     }
 
+    @GetMapping("{name}/edit")
+    public String editAttraction (@PathVariable int attractionId, Model model) {
+        TouristAttraction touristAttraction = attractionService.getAttractionFromId(attractionId);
+        if (touristAttraction == null) {
+            throw new IllegalArgumentException("Invalid touristattraction id");
+        }
+        model.addAttribute("attraction", touristAttraction);
+        model.addAttribute("tags", Tag.values());
+        return "editAttraction";
+    }
 
+    @PostMapping("update")
+    public String updateAttraction (@ModelAttribute TouristAttraction touristAttraction) {
+        attractionService.updateAttraction(touristAttraction);
+        return "redirect:/attractions";
+    }
 }
