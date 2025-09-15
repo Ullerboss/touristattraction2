@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Attractions</title>
+    <link th:href="@{/main.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Attractions</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>City</th>
+        <th>Tags</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${attractions.isEmpty()}">
+        <td colspan="5">There are no registered tourist attractions</td>
+    </tr>
+
+    <tr th:each="attraction : ${attractions}">
+        <td th:text="${attraction.name}"></td>
+        <td th:text="${attraction.description}"></td>
+        <td th:text="${attraction.city}"></td>
+        <td>
+            <span th:each="tag : ${attraction.tags}" th:text="${tag} + ' '"></span>
+        </td>
+        <td>
+            <a th:href="@{/attractions/{name}/edit(name=${attraction.name})}">✏️ Opdater</a>
+            <form th:action="@{/attractions/{name}/delete(name=${attraction.name})}" method="post" style="display:inline;">
+                <button type="submit">🗑️ Slet</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<p>
+    <a th:href="@{/attractions/add}">➕ Add new attraction</a>
+</p>
+</body>
+</html>

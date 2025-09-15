@@ -2,15 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${attraction.name}">Attraction Details</title>
     <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <body>
-<h1 th:text="${attraction.name.toUpperCase()}"> </h1>
+<h1 th:text="${attraction.name.toUpperCase()}">Attraction Name</h1>
+
+<h3>Tags</h3>
 <table>
+    <thead>
+    <tr>
+        <th>Tag</th>
+    </tr>
+    </thead>
+    <tbody>
     <tr th:each="tag : ${attraction.tags}">
         <td th:text="${tag}"></td>
     </tr>
+    </tbody>
 </table>
+
+<p>
+    <a th:href="@{/attractions}">← Back to attractions list</a>
+</p>
+
 </body>
 </html>
