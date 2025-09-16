@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${attraction.name}">Attraktion</title>
+    <link th:href="@{/main.css}" rel="stylesheet">
+</head>
+<body>
+<h1 th:text="${attraction.name}">Navn</h1>
+<p th:text="${attraction.description}">Beskrivelse</p>
+<p><strong>By:</strong> <span th:text="${attraction.city}">By</span></p>
+
+<h3>Tags:</h3>
+<ul>
+    <li th:each="tag : ${attraction.tags}" th:text="${tag}"></li>
+</ul>
+
+<p>
+    <a th:href="@{/attractions}">Tilbage</a>
+</p>
+</body>
+</html>

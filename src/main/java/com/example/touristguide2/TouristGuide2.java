@@ -1,13 +1,12 @@
-package com.example.touristattraction2privat;
+package com.example.touristguide2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TouristAttraction2privatApplication {
+public class TouristGuide2 {
 
     public static void main(String[] args) {
-        SpringApplication.run(TouristAttraction2privatApplication.class, args);
+        SpringApplication.run(TouristGuide2.class, args);
     }
-
 }

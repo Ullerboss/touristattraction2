@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Tilføj Attraktion</title>
+    <title>Opdater Attraktion</title>
     <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <body>
-<h1>Tilføj ny attraktion</h1>
+<h1>Opdatér attraktion</h1>
 
-<form th:action="@{/attractions/save}" th:object="${attraction}" method="post">
+<form th:action="@{/attractions/update}" th:object="${attraction}" method="post">
     <label>Navn</label>
-    <input type="text" th:field="*{name}">
+    <input type="text" th:field="*{name}" readonly>
     <br>
 
     <label>Beskrivelse</label>
@@ -28,7 +28,11 @@
                 th:text="${tag}">
         </option>
     </select>
-    <button type="submit">Tilføj</button>
+
+    <button type="submit">Gem</button>
 </form>
+<p>
+    <a th:href="@{/attractions}">Tilbage</a>
+</p>
 </body>
 </html>
