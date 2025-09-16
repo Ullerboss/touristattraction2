@@ -22,7 +22,7 @@ public class AttractionRepository {
 
     public TouristAttraction getAttractionFromName(String name) {
         for (TouristAttraction attraction : attractions) {
-            if (attraction.getName().equals(name)) {
+            if (attraction.getName().equalsIgnoreCase(name)) {
                 return attraction;
             }
         }
@@ -35,7 +35,7 @@ public class AttractionRepository {
 
     public void deleteAttraction(String name) {
         for (int i = 0; i < attractions.size(); i++) {
-            if (attractions.get(i).getName().equals(name)) {
+            if (attractions.get(i).getName().equalsIgnoreCase(name)) {
                 attractions.remove(i);
                 return;
             }

@@ -61,7 +61,7 @@ public class AttractionController {
         return "redirect:/attractions";
     }
 
-    @PostMapping("delete/{name}")
+    @PostMapping("{name}/delete")
     public String deleteAttraction(@PathVariable String name) {
         attractionService.deleteAttraction(name);
         return "redirect:/attractions";
