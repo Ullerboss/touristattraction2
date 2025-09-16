@@ -2,39 +2,37 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Update Attraction</title>
+    <title>Opdater Attraktion</title>
     <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <body>
-<h1>Update Attraction</h1>
+<h1>Opdatér attraktion</h1>
 
 <form th:action="@{/attractions/update}" th:object="${attraction}" method="post">
-    <label>Name</label>
+    <label>Navn</label>
     <input type="text" th:field="*{name}" readonly>
     <br>
 
-    <label>Description</label>
+    <label>Beskrivelse</label>
     <input type="text" th:field="*{description}">
     <br>
 
-    <label>City</label>
-    <select th:field="*{city}">
-        <option th:each="c : ${cities}" th:value="${c}" th:text="${c}" th:selected="${c.equals(attraction.city)}"></option>
-    </select>
+    <label>By</label>
+    <input type="text" th:field="*{city}">
     <br>
 
     <label>Tags</label>
-    <div th:each="t : ${tags}">
-        <input type="checkbox" th:field="*{tags}" th:value="${t}" th:checked="${attraction.tags.contains(t)}">
-        <span th:text="${t}"></span>
-    </div>
-    <br>
+    <select th:field="*{tags}" multiple>
+        <option th:each="tag : ${allTags}"
+                th:value="${tag}"
+                th:text="${tag}">
+        </option>
+    </select>
 
-    <button type="submit">Opdater</button>
+    <button type="submit">Gem</button>
 </form>
-
 <p>
-    <a th:href="@{/attractions}">← Tilbage til listen</a>
+    <a th:href="@{/attractions}">Tilbage</a>
 </p>
 </body>
 </html>

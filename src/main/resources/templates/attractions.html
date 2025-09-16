@@ -2,25 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Attractions</title>
+    <title>Attraktioner</title>
     <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <body>
-<h1>Attractions</h1>
+<h1>Attraktioner</h1>
 
 <table>
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>City</th>
+        <th>Navn</th>
+        <th>Beskrivelse</th>
+        <th>By</th>
         <th>Tags</th>
-        <th>Actions</th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
     <tr th:if="${attractions.isEmpty()}">
-        <td colspan="5">There are no registered tourist attractions</td>
+        <td colspan="5">Der er ingen registrerede attraktioner</td>
     </tr>
 
     <tr th:each="attraction : ${attractions}">
@@ -28,12 +28,15 @@
         <td th:text="${attraction.description}"></td>
         <td th:text="${attraction.city}"></td>
         <td>
-            <span th:each="tag : ${attraction.tags}" th:text="${tag} + ' '"></span>
+            <span th:each="tag, iter : ${attraction.tags}">
+                <span th:text="${tag}"></span>
+                <br th:if="${!iter.last}">
+            </span>
         </td>
         <td>
-            <a th:href="@{/attractions/{name}/edit(name=${attraction.name})}">✏️ Opdater</a>
+            <a th:href="@{/attractions/{name}/edit(name=${attraction.name})}">Opdater</a>
             <form th:action="@{/attractions/{name}/delete(name=${attraction.name})}" method="post" style="display:inline;">
-                <button type="submit">🗑️ Slet</button>
+                <button type="submit">Slet</button>
             </form>
         </td>
     </tr>
@@ -41,7 +44,7 @@
 </table>
 
 <p>
-    <a th:href="@{/attractions/add}">➕ Add new attraction</a>
+    <a th:href="@{/attractions/add}">Tilføj</a>
 </p>
 </body>
 </html>

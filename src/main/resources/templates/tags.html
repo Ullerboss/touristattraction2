@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${attraction.name}">Attraction Details</title>
+    <title th:text="${attraction.name}">Attraktion detaljer</title>
     <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <body>
-<h1 th:text="${attraction.name.toUpperCase()}">Attraction Name</h1>
+<h1 th:text="${attraction.name.toUpperCase()}">Navn</h1>
 
 <h3>Tags</h3>
 <table>
@@ -23,7 +23,7 @@
 </table>
 
 <p>
-    <a th:href="@{/attractions}">← Back to attractions list</a>
+    <a th:href="@{/attractions}">Tilbage</a>
 </p>
 
 </body>
