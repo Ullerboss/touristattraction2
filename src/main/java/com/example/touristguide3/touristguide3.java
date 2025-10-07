@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TouristGuide3 {
+public class touristguide3 {
 
     public static void main(String[] args) {
-        SpringApplication.run(TouristGuide3.class, args);
+        SpringApplication.run(touristguide3.class, args);
     }
 }
