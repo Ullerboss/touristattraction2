@@ -1,4 +1,4 @@
-package com.example.touristguide2.model;
+package com.example.touristguide3.model;
 
 import java.util.List;
 

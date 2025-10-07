@@ -1,7 +1,7 @@
-package com.example.touristguide2.repository;
+package com.example.touristguide3.repository;
 
-import com.example.touristguide2.model.Tag;
-import com.example.touristguide2.model.TouristAttraction;
+import com.example.touristguide3.model.Tag;
+import com.example.touristguide3.model.TouristAttraction;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
