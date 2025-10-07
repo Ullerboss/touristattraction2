@@ -2,75 +2,155 @@ package com.example.touristguide2.repository;
 
 import com.example.touristguide2.model.Tag;
 import com.example.touristguide2.model.TouristAttraction;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
 public class AttractionRepository {
-    private List<TouristAttraction> attractions = new ArrayList<>(List.of(
-            new TouristAttraction("SMK", "Museum for Kunst", "København", List.of(Tag.KUNST, Tag.MUSEUM)),
-            new TouristAttraction("Odense Zoo", "Europas bedste zoo", "Odense", List.of(Tag.BØRNEVENLIG)),
-            new TouristAttraction("Dyrehaven", "Naturpark med skovområder", "Kongens Lyngby", List.of(Tag.NATUR, Tag.GRATIS)),
-            new TouristAttraction("Tivoli", "Forlystelsespark midt i Københavns centrum", "København", List.of(Tag.BØRNEVENLIG))
-    ));
+    private final JdbcTemplate jdbc;
+
+    public AttractionRepository(JdbcTemplate jdbc) {
+        this.jdbc = jdbc;
+    }
+
+    private final RowMapper<TouristAttraction> rowMapper = (rs, rowNum) ->
+            new TouristAttraction(
+                    rs.getString("name"),
+                    rs.getString("description"),
+                    rs.getString("city"),
+                    getTagsForAttraction(rs.getInt("id"))
+            );
+
+//    private List<TouristAttraction> attractions = new ArrayList<>(List.of(
+//            new TouristAttraction("SMK", "Museum for Kunst", "København", List.of(Tag.KUNST, Tag.MUSEUM)),
+//            new TouristAttraction("Odense Zoo", "Europas bedste zoo", "Odense", List.of(Tag.BØRNEVENLIG)),
+//            new TouristAttraction("Dyrehaven", "Naturpark med skovområder", "Kongens Lyngby", List.of(Tag.NATUR, Tag.GRATIS)),
+//            new TouristAttraction("Tivoli", "Forlystelsespark midt i Københavns centrum", "København", List.of(Tag.BØRNEVENLIG))
+//    ));
+
+//    public List<TouristAttraction> getAttractions() {
+//        return attractions;
+//    }
 
     public List<TouristAttraction> getAttractions() {
-        return attractions;
+        return jdbc.query("SELECT * FROM tourist_attraction", rowMapper);
     }
+
+//    public TouristAttraction getAttractionFromName(String name) {
+//        for (TouristAttraction attraction : attractions) {
+//            if (attraction.getName().equalsIgnoreCase(name)) {
+//                return attraction;
+//            }
+//        }
+//        return null;
+//    }
 
     public TouristAttraction getAttractionFromName(String name) {
-        for (TouristAttraction attraction : attractions) {
-            if (attraction.getName().equalsIgnoreCase(name)) {
-                return attraction;
-            }
-        }
-        return null;
+        List<TouristAttraction> list = jdbc.query(
+                "SELECT * FROM tourist_attraction WHERE name = ?", rowMapper, name);
+        return list.isEmpty() ? null : list.getFirst();
     }
+
+//    public void saveAttraction(TouristAttraction attraction) {
+//        attractions.add(attraction);
+//    }
 
     public void saveAttraction(TouristAttraction attraction) {
-        attractions.add(attraction);
-    }
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbc.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO tourist_attraction (name, description, city) VALUES (?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, attraction.getName());
+            ps.setString(2, attraction.getDescription());
+            ps.setString(3, attraction.getCity());
+            return ps;
+        }, keyHolder);
 
-    public void deleteAttraction(String name) {
-        for (int i = 0; i < attractions.size(); i++) {
-            if (attractions.get(i).getName().equalsIgnoreCase(name)) {
-                attractions.remove(i);
-                return;
-            }
-        }
-    }
-
-    public void updateAttraction(TouristAttraction attraction) {
-        for (int i = 0; i < attractions.size(); i++) {
-            TouristAttraction existing = attractions.get(i);
-            if (existing.getName().equalsIgnoreCase(attraction.getName())) {
-                attractions.set(i, attraction);
-                break;
-            }
-        }
-    }
-
-    public List<String> getCities() {
-        List<String> cities = new ArrayList<>();
-        for (TouristAttraction attraction : attractions) {
-            if (!cities.contains(attraction.getCity())) {
-                cities.add(attraction.getCity());
-            }
-        }
-        return cities;
-    }
-
-    public List<Tag> getTags() {
-        List<Tag> tags = new ArrayList<>();
-        for (TouristAttraction attraction : attractions) {
+        Number id = keyHolder.getKey();
+        if (id != null && attraction.getTags() != null) {
             for (Tag tag : attraction.getTags()) {
-                if (!tags.contains(tag)) {
-                    tags.add(tag);
+                Integer tagId = getTagId(tag.name());
+                if (tagId != null) {
+                    jdbc.update("INSERT INTO attraction_tag (attraction_id, tag_id) VALUES (?,?)",
+                            id.intValue(), tagId);
                 }
             }
         }
-        return tags;
+    }
+
+//    public void deleteAttraction(String name) {
+//        for (int i = 0; i < attractions.size(); i++) {
+//            if (attractions.get(i).getName().equalsIgnoreCase(name)) {
+//                attractions.remove(i);
+//                return;
+//            }
+//        }
+//    }
+
+    public void deleteAttraction(String name) {
+        jdbc.update("DELETE FROM tourist_attraction WHERE name = ?", name);
+    }
+
+//    public void updateAttraction(TouristAttraction attraction) {
+//        for (int i = 0; i < attractions.size(); i++) {
+//            TouristAttraction existing = attractions.get(i);
+//            if (existing.getName().equalsIgnoreCase(attraction.getName())) {
+//                attractions.set(i, attraction);
+//                break;
+//            }
+//        }
+//    }
+
+    public void updateAttraction(TouristAttraction attraction) {
+        jdbc.update("UPDATE tourist_attraction SET description=?, city=? WHERE name=?",
+                attraction.getDescription(), attraction.getCity(), attraction.getName());
+    }
+
+    //     public List<String> getCities() {
+    //        List<String> cities = new ArrayList<>();
+    //        for (TouristAttraction attraction : attractions) {
+    //            if (!cities.contains(attraction.getCity())) {
+    //                cities.add(attraction.getCity());
+    //            }
+    //        }
+    //        return cities;
+    //    }
+
+    public List<String> getCities() {
+        return jdbc.query("SELECT DISTINCT city FROM tourist_attraction", (rs, i) -> rs.getString("city"));
+    }
+
+//    public List<Tag> getTags() {
+//        List<Tag> tags = new ArrayList<>();
+//        for (TouristAttraction attraction : attractions) {
+//            for (Tag tag : attraction.getTags()) {
+//                if (!tags.contains(tag)) {
+//                    tags.add(tag);
+//                }
+//            }
+//        }
+//        return tags;
+//    }
+
+    public List<Tag> getTags() {
+        return jdbc.query("SELECT name FROM tag", (rs, i) -> Tag.valueOf(rs.getString("name")));
+    }
+
+    private List<Tag> getTagsForAttraction(int attractionId) {
+        return jdbc.query("SELECT t.name FROM tag t JOIN attraction_tag at ON t.id = at.tag_id WHERE at.attraction_id = ?",
+                (rs, rowNum) -> Tag.valueOf(rs.getString("name")), attractionId);
+    }
+
+    private Integer getTagId(String tagName) {
+        List<Integer> ids = jdbc.query("SELECT id FROM tag WHERE name = ?", (rs, i) -> rs.getInt("id"), tagName);
+        return ids.isEmpty() ? null : ids.get(0);
     }
 }
