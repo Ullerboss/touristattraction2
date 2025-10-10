@@ -28,21 +28,15 @@ public class AttractionRepository {
                     getTagsForAttraction(rs.getInt("id"))
             );
 
-
-
     public List<TouristAttraction> getAttractions() {
         return jdbc.query("SELECT * FROM tourist_attraction", rowMapper);
     }
-
-
 
     public TouristAttraction getAttractionFromName(String name) {
         List<TouristAttraction> list = jdbc.query(
                 "SELECT * FROM tourist_attraction WHERE name = ?", rowMapper, name);
         return list.isEmpty() ? null : list.getFirst();
     }
-
-
 
     public void saveAttraction(TouristAttraction attraction) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -68,26 +62,18 @@ public class AttractionRepository {
         }
     }
 
-
-
     public void deleteAttraction(String name) {
         jdbc.update("DELETE FROM tourist_attraction WHERE name = ?", name);
     }
-
-
 
     public void updateAttraction(TouristAttraction attraction) {
         jdbc.update("UPDATE tourist_attraction SET description=?, city=? WHERE name=?",
                 attraction.getDescription(), attraction.getCity(), attraction.getName());
     }
 
-
-
     public List<String> getCities() {
         return jdbc.query("SELECT DISTINCT city FROM tourist_attraction", (rs, i) -> rs.getString("city"));
     }
-
-
 
     public List<Tag> getTags() {
         return jdbc.query("SELECT name FROM tag", (rs, i) -> Tag.valueOf(rs.getString("name")));
@@ -100,6 +86,6 @@ public class AttractionRepository {
 
     private Integer getTagId(String tagName) {
         List<Integer> ids = jdbc.query("SELECT id FROM tag WHERE name = ?", (rs, i) -> rs.getInt("id"), tagName);
-        return ids.isEmpty() ? null : ids.get(0);
+        return ids.isEmpty() ? null : ids.getFirst();
     }
 }
